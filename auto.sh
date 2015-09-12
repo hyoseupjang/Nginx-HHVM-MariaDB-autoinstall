@@ -1,10 +1,12 @@
 ##!/bin/sh
+echo This Script will set up Nginx-HHVM-MariaDB High perfomance server. 
+echo This script will install MariaDB by using RPM, But HHVM and Nginx will be installd by compile. I will update this script to install MariaDB using compile installation. 
 echo ######################### Start Install HHVM #########################
 useradd --shell /sbin/nologin www-data
 yum -y update
-yum -y install git wget 
+yum -y install 
 rpm -Uvh http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
-yum -y install cpp gcc-c++ cmake git psmisc {binutils,boost,jemalloc}-devel {ImageMagick,sqlite,tbb,bzip2,openldap,readline,elfutils-libelf,gmp,lz4,pcre}-devel lib{xslt,event,yaml,vpx,png,zip,icu,mcrypt,memcached,cap,dwarf}-devel {unixODBC,expat,mariadb}-devel lib{edit,curl,xml2,xslt}-devel glog-devel oniguruma-devel ocaml gperf enca libjpeg-turbo-devel openssl-devel make
+yum -y install cpp gcc-c++ cmake git psmisc {binutils,boost,jemalloc}-devel {ImageMagick,sqlite,tbb,bzip2,openldap,readline,elfutils-libelf,gmp,lz4,pcre}-devel lib{xslt,event,yaml,vpx,png,zip,icu,mcrypt,memcached,cap,dwarf}-devel {unixODBC,expat,mariadb}-devel lib{edit,curl,xml2,xslt}-devel glog-devel oniguruma-devel ocaml gperf enca libjpeg-turbo-devel openssl-devel make wget 
 echo ######################### Upgrade Maria DB #########################
 yum -y remove mariadb* mariadb-libs-5.5* 
 cat >  /etc/yum.repos.d/MariaDB.repo <<END
