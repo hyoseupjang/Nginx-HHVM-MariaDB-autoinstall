@@ -4,14 +4,9 @@ useradd --shell /sbin/nologin www-data
 yum -y update
 yum -y install git wget 
 rpm -Uvh http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
-yum -y install cpp gcc-c++ cmake git psmisc {binutils,boost,jemalloc}-devel \
-{ImageMagick,sqlite,tbb,bzip2,openldap,readline,elfutils-libelf,gmp,lz4,pcre}-devel \
-lib{xslt,event,yaml,vpx,png,zip,icu,mcrypt,memcached,cap,dwarf}-devel \
-{unixODBC,expat,mariadb}-devel lib{edit,curl,xml2,xslt}-devel \
-glog-devel oniguruma-devel ocaml gperf enca libjpeg-turbo-devel openssl-devel \
-make
+yum -y install cpp gcc-c++ cmake git psmisc {binutils,boost,jemalloc}-devel {ImageMagick,sqlite,tbb,bzip2,openldap,readline,elfutils-libelf,gmp,lz4,pcre}-devel lib{xslt,event,yaml,vpx,png,zip,icu,mcrypt,memcached,cap,dwarf}-devel {unixODBC,expat,mariadb}-devel lib{edit,curl,xml2,xslt}-devel glog-devel oniguruma-devel ocaml gperf enca libjpeg-turbo-devel openssl-devel make
 echo ######################### Upgrade Maria DB #########################
-yum -y remove mariadb mariadb-libs-5.5* 
+yum -y remove mariadb* mariadb-libs-5.5* 
 cat >  /etc/yum.repos.d/MariaDB.repo <<END
 # MariaDB 10.1 CentOS repository list - created 2015-09-12 00:45 UTC
 # http://mariadb.org/mariadb/repositories/
@@ -45,6 +40,7 @@ ExecStart=/usr/local/bin/hhvm --config /etc/hhvm/server.ini --user www-data --mo
 [Install]
 WantedBy=multi-user.target
 END
+
 systemctl enable hhvm
 systemctl start hhvm
 systemctl status hhvm
