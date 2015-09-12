@@ -40,11 +40,9 @@ ExecStart=/usr/local/bin/hhvm --config /etc/hhvm/server.ini --user www-data --mo
 [Install]
 WantedBy=multi-user.target
 END
-
 systemctl enable hhvm
 systemctl start hhvm
 systemctl status hhvm
-
 echo ######################### Get NGINX Source & Compile & Install #########################
 yum -y install zlib-devel 
 cd /tmp
@@ -58,15 +56,36 @@ cd /usr/bin/cd
 ln -s /usr/local/nginx/sbin/nginx
 cd /usr/local/nginx/conf
 echo ######################### Replace Nginx.conf #########################
-rm /usr/local/nginx/conf/nginx.conf
+rm -f /usr/local/nginx/conf/nginx.conf
 wget https://raw.githubusercontent.com/nadanomics/Nginx-HHVM-MariaDB-autoinstall/master/nginx.conf
 cd /usr/local/nginx/html
 echo ######################### Download hhvminfo.php #########################
 wget https://gist.githubusercontent.com/ck-on/67ca91f0310a695ceb65/raw/c0d9a376680ba5dc83e8f10475293f4042bda8a7/hhvminfo.php
-nginx
+systemctl stop firewalld
+systemctl mask firewalld
+yum -y install iptables-services
+systemctl enable iptables
+rm -f /etc/sysconfig/iptables
+cat > /etc/sysconfig/iptables <<END
+# you can edit this manually or use system-config-firewall
+*filter
+:INPUT ACCEPT [0:0]
+:FORWARD ACCEPT [0:0]
+:OUTPUT ACCEPT [0:0]
+-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -p icmp -j ACCEPT
+-A INPUT -i lo -j ACCEPT
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 80 -j ACCEPT
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 443 -j ACCEPT
+-A INPUT -j REJECT --reject-with icmp-host-prohibited
+-A FORWARD -j REJECT --reject-with icmp-host-prohibited
+COMMIT
+END
 echo You need to edit nginx.conf worker_processes as your server core number. And do "nginx -t reload" to reload conf file. 
 echo You also need to do db secure installation. 
 mysql_secure_installation
+nginx
 clear
 echo You can test webserver by accessing http://localhost If you want to access your webserver, please open 80port on iptables. 
 echo you can get more information about this server, please watch hhvm info by accessing http://localhost/hhvminfo.php And, you must remove after read about it. 
