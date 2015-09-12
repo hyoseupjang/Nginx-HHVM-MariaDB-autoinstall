@@ -54,7 +54,7 @@ cd nginx-1.9.4/
 ./configure --with-http_ssl_module --user=www-data --group=www-data
 make
 make install
-cd /usr/bin/cd
+cd /usr/bin/
 ln -s /usr/local/nginx/sbin/nginx
 cd /usr/local/nginx/conf
 echo ######################### Replace Nginx.conf #########################
@@ -87,8 +87,8 @@ END
 systemctl restart iptables
 echo You need to edit nginx.conf worker_processes as your server core number. And do "nginx -t reload" to reload conf file. 
 echo You also need to do DB secure installation. 
-mysql_secure_installation
 nginx
+mysql_secure_installation
 clear
 echo You can test webserver by accessing http://server_ip.  
 echo you can get more information about this server, please watch hhvm info by accessing http://server_ip/hhvminfo.php
