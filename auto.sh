@@ -8,11 +8,16 @@ rpm -Uvh http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch
 yum -y install cpp gcc-c++ cmake git psmisc {binutils,boost,jemalloc}-devel {ImageMagick,sqlite,tbb,bzip2,openldap,readline,elfutils-libelf,gmp,lz4,pcre}-devel lib{xslt,event,yaml,vpx,png,zip,icu,mcrypt,memcached,cap,dwarf}-devel {unixODBC,expat,mariadb}-devel lib{edit,curl,xml2,xslt}-devel glog-devel oniguruma-devel ocaml gperf enca libjpeg-turbo-devel openssl-devel make
 echo ######################### Upgrade Maria DB #########################
 yum -y remove mariadb mariadb-libs-5.5* 
-wget http://vpn.record.or.kr/MariaDB-10.1.7-centos7-x86_64-client.rpm
-wget http://vpn.record.or.kr/MariaDB-10.1.7-centos7-x86_64-common.rpm
-wget http://vpn.record.or.kr/MariaDB-10.1.7-centos7-x86_64-devel.rpm
-wget http://vpn.record.or.kr/MariaDB-10.1.7-centos7-x86_64-server.rpm
-yum -y install MariaDB* 
+cat >  /etc/yum.repos.d/MariaDB.repo <<END
+# MariaDB 10.1 CentOS repository list - created 2015-09-12 00:45 UTC
+# http://mariadb.org/mariadb/repositories/
+[mariadb]
+name = MariaDB
+baseurl = http://yum.mariadb.org/10.1/centos7-amd64
+gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+gpgcheck=1
+END
+yum -y install MariaDB-server MariaDB-client MariaDB-devel
 service mysql start
 cd /tmp
 git clone https://github.com/facebook/hhvm -b master hhvm --recursive
