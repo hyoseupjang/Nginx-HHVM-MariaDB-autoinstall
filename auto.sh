@@ -11,14 +11,20 @@ lib{xslt,event,yaml,vpx,png,zip,icu,mcrypt,memcached,cap,dwarf}-devel \
 glog-devel oniguruma-devel ocaml gperf enca libjpeg-turbo-devel openssl-devel \
 make
 echo ######################### Upgrade Maria DB #########################
-yum -y remove mariadb-libs-5.5* 
-wget http://ftp.kaist.ac.kr/mariadb/mariadb-10.1.7/yum/centos7-amd64/rpms/MariaDB-10.1.7-centos7-x86_64-client.rpm
-wget http://ftp.kaist.ac.kr/mariadb/mariadb-10.1.7/yum/centos7-amd64/rpms/MariaDB-10.1.7-centos7-x86_64-common.rpm
-wget http://ftp.kaist.ac.kr/mariadb/mariadb-10.1.7/yum/centos7-amd64/rpms/MariaDB-10.1.7-centos7-x86_64-devel.rpm
-wget http://ftp.kaist.ac.kr/mariadb/mariadb-10.1.7/yum/centos7-amd64/rpms/MariaDB-10.1.7-centos7-x86_64-server.rpm
-yum -y install MariaDB* 
+yum -y remove mariadb mariadb-libs-5.5* 
+cat >  /etc/yum.repos.d/MariaDB.repo <<END
+# MariaDB 10.1 CentOS repository list - created 2015-09-12 00:45 UTC
+# http://mariadb.org/mariadb/repositories/
+[mariadb]
+name = MariaDB
+baseurl = http://yum.mariadb.org/10.1/centos7-amd64
+gpgkey=https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+gpgcheck=1
+END
+yum -y install MariaDB-server MariaDB-client MariaDB-devel
 service mysql start
 cd /tmp
+echo ######################### Get HHVM Source & Compile #########################
 git clone https://github.com/facebook/hhvm -b master  hhvm  --recursive
 cd hhvm
 cmake .
@@ -43,7 +49,7 @@ systemctl enable hhvm
 systemctl start hhvm
 systemctl status hhvm
 
-echo ######################### Install NGINX #########################
+echo ######################### Get NGINX Source & Compile & Install #########################
 yum -y install zlib-devel 
 cd /tmp
 wget http://nginx.org/download/nginx-1.9.4.tar.gz
@@ -55,9 +61,11 @@ make install
 cd /usr/bin/cd
 ln -s /usr/local/nginx/sbin/nginx
 cd /usr/local/nginx/conf
+echo ######################### Replace Nginx.conf #########################
 rm /usr/local/nginx/conf/nginx.conf
 wget https://raw.githubusercontent.com/nadanomics/Nginx-HHVM-MariaDB-autoinstall/master/nginx.conf
 cd /usr/local/nginx/html
+echo ######################### Download hhvminfo.php #########################
 wget https://gist.githubusercontent.com/ck-on/67ca91f0310a695ceb65/raw/c0d9a376680ba5dc83e8f10475293f4042bda8a7/hhvminfo.php
 nginx
 echo You need to edit nginx.conf worker_processes as your server core number. And do "nginx -t reload" to reload conf file. 
