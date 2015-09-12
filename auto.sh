@@ -50,7 +50,7 @@ yum -y install zlib-devel
 cd /tmp
 wget http://nginx.org/download/nginx-1.9.4.tar.gz
 tar -cvzf nginx-1.9.4.tar.gz
-cd nginx-1.9.4.tar.gz/
+cd nginx-1.9.4/
 ./configure --with-http_ssl_module --user=www-data --group=www-data
 make
 make install
