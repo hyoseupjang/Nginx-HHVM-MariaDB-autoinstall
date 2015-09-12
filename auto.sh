@@ -82,10 +82,12 @@ cat > /etc/sysconfig/iptables <<END
 -A FORWARD -j REJECT --reject-with icmp-host-prohibited
 COMMIT
 END
+systemctl restart iptables
 echo You need to edit nginx.conf worker_processes as your server core number. And do "nginx -t reload" to reload conf file. 
-echo You also need to do db secure installation. 
+echo You also need to do DB secure installation. 
 mysql_secure_installation
 nginx
 clear
-echo You can test webserver by accessing http://localhost If you want to access your webserver, please open 80port on iptables. 
-echo you can get more information about this server, please watch hhvm info by accessing http://localhost/hhvminfo.php And, you must remove after read about it. 
+echo You can test webserver by accessing http://server_ip.  
+echo you can get more information about this server, please watch hhvm info by accessing http://server_ip/hhvminfo.php
+echo And, you must remove hhvminfo.php after read about it. 
