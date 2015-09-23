@@ -48,9 +48,9 @@ systemctl status hhvm
 echo ######################### Get NGINX Source & Compile & Install #########################
 yum -y install zlib-devel 
 cd /tmp
-wget http://nginx.org/download/nginx-1.9.4.tar.gz
-tar -xvzf nginx-1.9.4.tar.gz
-cd nginx-1.9.4/
+wget http://nginx.org/download/nginx-1.9.5.tar.gz
+tar -xvzf nginx-1.9.5.tar.gz
+cd nginx-1.9.5/
 ./configure --with-http_ssl_module --user=www-data --group=www-data
 make
 make install
