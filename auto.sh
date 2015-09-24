@@ -30,13 +30,16 @@ echo ######################### HHVM Test & Install #########################
 ./hphp/hhvm/hhvm --version
 make install
 echo ######################### Set hhvm.service #########################
+mkdir /etc/hhvm
+touch server.ini
+chown -R www-data /etc/hhvm
 cat > /usr/lib/systemd/system/hhvm.service <<END
 [Unit]
 Description=HHVM HipHop Virtual Machine (FCGI)
 
 [Service]
 ExecStartPre=-/usr/bin/mkdir -p /var/run/hhvm
-ExecStartPre=-/usr/bin/chown nobody /var/run/hhvm
+ExecStartPre=-/usr/bin/chown www-data /var/run/hhvm
 ExecStart=/usr/local/bin/hhvm --config /etc/hhvm/server.ini --user www-data --mode daemon -vServer.Type=fastcgi -vServer.Port=9000
 
 [Install]
