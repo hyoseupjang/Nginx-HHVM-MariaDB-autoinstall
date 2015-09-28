@@ -31,7 +31,7 @@ echo ######################### HHVM Test & Install #########################
 make install
 echo ######################### Set hhvm.service #########################
 mkdir /etc/hhvm
-touch server.ini
+touch /etc/hhvm/server.ini
 chown -R www-data /etc/hhvm
 cat > /usr/lib/systemd/system/hhvm.service <<END
 [Unit]
